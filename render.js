@@ -1,20 +1,35 @@
-setInterval(() => {
-	context.clearRect(0, 0, canvas.width, canvas.height)
-	context.fillStyle = '#111111'
-	context.fillRect(0, 0, canvas.width, canvas.height)
+function setup() {
+	createCanvas(windowWidth, windowHeight)
+	background(32)
+
+	textSize(16)
+	textAlign(CENTER)
+
+	frameRate(5)
+}
+
+function draw() {
+	// clears the canvas
+	background(32)
 
 	center.areas.forEach(a => {
 		a.stations.forEach(s => {
-			context.beginPath()
-			context.arc(s.sector.c.x, s.sector.c.y, s.sector.r, 0, 2 * Math.PI)
-			context.strokeStyle = '#aaa'
-			context.lineWidth = 2
-			context.stroke()
+			let c = s.sector.c
+			let r = s.sector.r
 
-			context.font = '16px Arial'
-			context.fillStyle = '#aaa'
-			context.textAlign = 'center'
-			context.fillText(`S${s.id}`, s.sector.c.x, s.sector.c.y)
+			noFill()
+			strokeWeight(4)
+			stroke('#ffffffaa')
+			if (s.sector.chords.length === 0) {
+				ellipse(c.x, c.y, r, r)
+			} else {
+				// arc(c.x, c.y, r, r, 0, 2 * Math.PI)
+				// TODO: render chords and arcs (yeah its hard)
+			}
+
+			noStroke()
+			fill('#ffffff')
+			text(`S${s.id}`, c.x, c.y)
 		})
 	})
-}, 200)
+}
