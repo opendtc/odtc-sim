@@ -65,13 +65,14 @@ let Center = () => {
 			// no new stations with centers that are inside existing jurisdiction
 			if (area.isInside(location)) return
 
-			// no new stations that are completely detached from existing jurisdiction
-			// TODO:
+			// TODO: no new stations that are completely detached from existing jurisdiction
 
 			let newStation = {
 				id: this.nextStationId++,
+				// TODO: use ADP to generate chords for this and neighboring stations
 				sector: Sector(location, range, []),
 				area,
+				neighboringAreas: [], // TODO: find neighboring stations that belong to other areas
 				otherStations: area.stations,
 				generateTypeSFlightPlan: function() {}
 			}
