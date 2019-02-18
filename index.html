@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+
+		<title>ODTC Simulation</title>
+		<meta name="description" content="ODTC Simulation" />
+		<meta name="author" content="ODTC" />
+
+		<!-- <link rel="stylesheet" href="css/styles.css?v=1.0" /> -->
+		<style>
+			html,
+			body {
+				height: 100vh;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<canvas id="map" width="100%" height="100%"></canvas>
+		<script>
+			let canvas = document.getElementById('map'),
+				context = canvas.getContext('2d')
+			canvas.width = window.innerWidth
+			canvas.height = window.innerHeight
+		</script>
+		<script src="/controllers.js"></script>
+		<script src="/sim.js"></script>
+	</body>
+</html>
