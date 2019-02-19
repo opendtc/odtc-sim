@@ -22,7 +22,7 @@ function draw() {
 			stroke('#ffffffaa')
 
 			if (s.sector.chords.length === 0) {
-				ellipse(c.x, c.y, r, r)
+				ellipse(c.x, c.y, r * 2, r * 2)
 			} else {
 				// arc(c.x, c.y, r, r, 0, 2 * Math.PI)
 				// TODO: render chords and arcs (yeah its hard)
