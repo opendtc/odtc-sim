@@ -113,7 +113,10 @@ let Center = () => {
 					else {
 						neighborStationsOutsideArea.push(s)
 
-						// TODO: add this station to area's neighbor if not there already
+						// make sure that this neighbor station's area is added as a neighbor area of this area
+						if (!area.neighboringAreas.map(a => a.id).includes(s.areaId)) {
+							area.neighboringAreas.push(this.areas[s.areaId])
+						}
 					}
 				})
 			} else {
