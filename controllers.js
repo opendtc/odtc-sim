@@ -77,7 +77,6 @@ let Area = (id, existingAreas) => {
 		}
 	}
 
-	// existingAreas.forEach(a => a.allAreas.push(newArea))
 	return newArea
 }
 
@@ -111,7 +110,11 @@ let Center = () => {
 				// separate intersecting stations into those in this area and those in other areas
 				intersectingStations.forEach(s => {
 					if (s.areaId === areaId) neighborStationsInArea.push(s)
-					else neighborStationsOutsideArea.push(s)
+					else {
+						neighborStationsOutsideArea.push(s)
+
+						// TODO: add this station to area's neighbor if not there already
+					}
 				})
 			} else {
 				// if no stations are neighbors, then create a new area
@@ -157,7 +160,6 @@ let Center = () => {
 				generateTypeSFlightPlan: function() {}
 			}
 
-			// area.stations.forEach(s => s.stationsInArea.push(newStation)) // add this station to the station list of all other stations in the area
 			area.stations.push(newStation) // add this station to the area
 			this.stations.push(newStation) // add this station to center list
 
