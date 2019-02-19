@@ -20,6 +20,7 @@ function draw() {
 			noFill()
 			strokeWeight(4)
 			stroke('#ffffffaa')
+
 			if (s.sector.chords.length === 0) {
 				ellipse(c.x, c.y, r, r)
 			} else {

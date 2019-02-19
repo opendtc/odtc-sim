@@ -63,7 +63,7 @@ let Area = (id, existingAreas) => {
 	let newArea = {
 		meanCenter: null,
 		stations: [],
-		otherAreas: existingAreas,
+		allAreas: existingAreas,
 		neighboringAreas: [],
 		id: id,
 		generateTypeAFlightPlan: function() {}, // TODO:
@@ -77,7 +77,7 @@ let Area = (id, existingAreas) => {
 		}
 	}
 
-	existingAreas.forEach(a => a.otherAreas.push(newArea))
+	// existingAreas.forEach(a => a.allAreas.push(newArea))
 	return newArea
 }
 
@@ -115,11 +115,11 @@ let Center = () => {
 				})
 			} else {
 				// if no stations are neighbors, then create a new area
-				area = Area(nextAreaId++, this.areas)
+				area = Area(this.nextAreaId++, this.areas)
 				this.areas.push(area)
 			}
 
-			let sector = Sector(location, range)
+			let sector = Sector(location, range, [])
 
 			intersectingStations.forEach(s => {
 				// https://stackoverflow.com/questions/3349125/circle-circle-intersection-points
@@ -157,7 +157,7 @@ let Center = () => {
 				generateTypeSFlightPlan: function() {}
 			}
 
-			area.stations.forEach(s => s.stationsInArea.push(newStation)) // add this station to the station list of all other stations in the area
+			// area.stations.forEach(s => s.stationsInArea.push(newStation)) // add this station to the station list of all other stations in the area
 			area.stations.push(newStation) // add this station to the area
 			this.stations.push(newStation) // add this station to center list
 

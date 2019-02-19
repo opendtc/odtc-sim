@@ -7,10 +7,6 @@ let sleep = function(t) {
 }
 
 ;(async () => {
-	center.newArea()
-
-	center.newStation({ x: 900, y: 400 }, 100, 0)
-
-	await sleep(2000)
-	center.newStation({ x: 1200, y: 300 }, 120, 0)
+	center.newStation({ x: 900, y: 400 }, 200, 0)
+	center.newStation({ x: 1200, y: 400 }, 200, 0)
 })()
