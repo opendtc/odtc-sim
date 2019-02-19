@@ -34,6 +34,7 @@ let Sector = (c, r, chords) => {
 
 			return true
 		},
+		// TODO: change this to doesCircleIntersect, find an algorithm that checks if a circle intersects with sector
 		doCirclesIntersect: function(c, r) {
 			// checks if this sector's circle intersects with the given circle
 			return dist(c, this.c) < r + this.r
@@ -97,6 +98,7 @@ let Center = () => {
 
 			area.meanCenter = getMeanCenter(area.stations)
 		},
+		// TODO: make Area a class, move out of center's methods, and add split/merge/movestation functions
 		newArea: function(stations = []) {
 			let existingAreas = this.areas
 			let newArea = {
@@ -104,7 +106,6 @@ let Center = () => {
 				stations,
 				otherAreaControllers: existingAreas,
 				id: this.nextAreaId++,
-				// TODO: actually implementing the newStation and newArea protocols
 				generateTypeAFlightPlan: function() {}, // TODO:
 				generateTypeSFlightPlan: function() {}, // TODO:
 				isInside: s => {
