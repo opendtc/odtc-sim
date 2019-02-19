@@ -8,7 +8,13 @@ let sleep = function(t) {
 
 ;(async () => {
 	center.newStation({ x: 900, y: 400 }, 200, 0)
+
+	await sleep(2000)
 	center.newStation({ x: 1200, y: 400 }, 200, 0)
 
-	center.newStation({ x: 1000, y: 700 }, 100, 0)
+	await sleep(2000)
+	center.newStation({ x: 1050, y: 600 }, 200, 0)
+
+	await sleep(2000)
+	center.newStation({ x: 1050, y: 250 }, 200, 0)
 })()
