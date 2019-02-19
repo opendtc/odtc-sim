@@ -33,6 +33,10 @@ let Sector = (c, r, chords) => {
 			}
 
 			return true
+		},
+		doCirclesIntersect: function(c, r) {
+			// checks if this sector's circle intersects with the given circle
+			return dist(c, this.c) < r + this.r
 		}
 	}
 }
@@ -59,19 +63,29 @@ let Center = () => {
 		nextStationId: 0,
 		nextAreaId: 0,
 		areas: [],
-		newStation: function(location, range, areaId) {
-			let area = this.areas.filter(a => a.id === areaId)[0]
+		stations: [],
+		newStation: function(location, range) {
+			// before all else, check that the center of this station is not inside another sector
+			for (station of this.stations) {
+				if (station.sector.isInside(location)) return
+			}
 
-			// no new stations with centers that are inside existing jurisdiction
-			if (area.isInside(location)) return
+			// first, check if the station intersects with any other station
+			let intersectingStations = this.stations.filter(s =>
+				s.sector.doCirclesIntersect(location, range)
+			)
 
-			// TODO: no new stations that are completely detached from existing jurisdiction
+			if (intersectingStations.length > 0) {
+				// TODO: if there are intersecting stations, add this station to one of those areas
+			} else {
+				// TODO: if no stations are neighbors, then create a new area
+			}
 
 			let newStation = {
 				id: this.nextStationId++,
 				// TODO: use ADP to generate chords for this and neighboring stations
 				sector: Sector(location, range, []),
-				area,
+				areaId: area.id,
 				neighboringAreas: [], // TODO: find neighboring stations that belong to other areas
 				otherStations: area.stations,
 				generateTypeSFlightPlan: function() {}
@@ -79,6 +93,7 @@ let Center = () => {
 
 			area.stations.forEach(s => s.otherStations.push(newStation))
 			area.stations.push(newStation)
+			this.stations.push(newStation)
 
 			area.meanCenter = getMeanCenter(area.stations)
 		},
