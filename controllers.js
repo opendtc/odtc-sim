@@ -72,6 +72,10 @@ let dijkstra = (nodes, originId, targetId) => {
 	 * originId: Number,
 	 * targetId: Number
 	 */
+	/**
+	 * please return the shortest path in the form of an array of IDs
+	 * [1, 2, 3, 4, ...]
+	 */
 }
 
 // TODO: add split/merge/movestation functions
@@ -90,13 +94,12 @@ let Area = (id, existingAreas) => {
 				id: a.id,
 				edges: a.neighboringAreas.map(neighbor => ({
 					id: neighbor.id,
+					// TODO: consider traffic, weather, and other factors in cost for dijkstras
 					cost: dist(a.meanCenter, neighbor.meanCenter)
 				}))
 			}))
 
-			let path = dijkstra(nodes, this.id, targetArea.id)
-
-			// TODO: consider traffic, weather, and other factors in cost for dijkstras
+			return dijkstra(nodes, this.id, targetArea.id)
 		},
 		generateTypeSFlightPlan: function() {}, // TODO:
 		isInside: function(s) {
