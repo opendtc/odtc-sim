@@ -58,6 +58,22 @@ let getMeanCenter = stations => {
 	return sum
 }
 
+let dijkstra = (nodes, originId, targetId) => {
+	// TODO: ANDY PLEASE WRITE THIS THANKS
+	/**
+	 * nodes: [
+	 *    {
+	 *      id: Number,
+	 *      edges: [
+	 *        { id: Number, cost: Number }
+	 *      ]
+	 *    }
+	 * ],
+	 * originId: Number,
+	 * targetId: Number
+	 */
+}
+
 // TODO: add split/merge/movestation functions
 let Area = (id, existingAreas) => {
 	let newArea = {
@@ -66,11 +82,26 @@ let Area = (id, existingAreas) => {
 		allAreas: existingAreas,
 		neighboringAreas: [],
 		id: id,
-		generateTypeAFlightPlan: function() {}, // TODO:
+		generateTypeAFlightPlan: function(dest) {
+			let targetArea = this.allAreas.filter(a => a.isInside(dest))[0]
+
+			// convert allAreas into a simpler graph to work with
+			let nodes = this.allAreas.map(a => ({
+				id: a.id,
+				edges: a.neighboringAreas.map(neighbor => ({
+					id: neighbor.id,
+					cost: dist(a.meanCenter, neighbor.meanCenter)
+				}))
+			}))
+
+			let path = dijkstra(nodes, this.id, targetArea.id)
+
+			// TODO: consider traffic, weather, and other factors in cost for dijkstras
+		},
 		generateTypeSFlightPlan: function() {}, // TODO:
-		isInside: s => {
+		isInside: function(s) {
 			// check if s is inside area
-			for (station of stations) {
+			for (station of this.stations) {
 				if (station.sector.isInside(s)) return true
 			}
 			return false
@@ -116,6 +147,14 @@ let Center = () => {
 						// make sure that this neighbor station's area is added as a neighbor area of this area
 						if (!area.neighboringAreas.map(a => a.id).includes(s.areaId)) {
 							area.neighboringAreas.push(this.areas[s.areaId])
+						}
+
+						if (
+							!this.areas[s.areaId].neighboringAreas
+								.map(a => a.id)
+								.includes(areaId)
+						) {
+							this.areas[s.areaId].neighboringAreas.push(area)
 						}
 					}
 				})
@@ -168,7 +207,6 @@ let Center = () => {
 
 			area.meanCenter = getMeanCenter(area.stations)
 		},
-		newArea: function(stations = []) {},
 		noFlyZones: [] // TODO:
 	}
 }
