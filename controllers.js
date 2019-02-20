@@ -73,8 +73,11 @@ let dijkstra = (nodes, originId, targetId) => {
 	 * targetId: Number
 	 */
 	/**
-	 * please return the shortest path in the form of an array of IDs
-	 * [1, 2, 3, 4, ...]
+	 * please return the shortest path in the form of an array of IDs and the cost
+	 * {
+	 *    path: [1, 2, 3, 4, ...],
+	 *    cost: 1093
+	 * }
 	 */
 }
 
@@ -99,9 +102,40 @@ let Area = (id, existingAreas) => {
 				}))
 			}))
 
-			return dijkstra(nodes, this.id, targetArea.id)
+			return dijkstra(nodes, this.id, targetArea.id).path
 		},
-		generateTypeSFlightPlan: function() {}, // TODO:
+		generateTypeSFlightPlan: function(originStationId, targetAreaId) {
+			// generates a flight plan to appropriate sector for handoff to area with id areaId
+
+			// find the station(s) in this area that connects to that area
+			let handOffStations = this.stations.filter(s => {
+				return s.neighborStationsOutsideArea
+					.map(nS => nS.areaId)
+					.includes(targetAreaId)
+			})
+
+			// convert stations into a simpler graph to work with
+			let nodes = this.stations.map(s => ({
+				id: s.id,
+				edges: s.neighborStationsInArea.map(neighbor => ({
+					id: neighbor.id,
+					cost: dist(s.sector.c, neighbor.sector.c)
+				}))
+			}))
+
+			// perform dijkstra's on each of the possible handoff stations, and find the one that yields the shortest path
+			let cost = Number.MAX_SAFE_INTEGER,
+				bestPath
+			handOffStations.forEach(s => {
+				let res = dijkstra(nodes, originStationId, s.id)
+				if (res.cost < cost) bestPath = res.path
+			})
+
+			return {
+				path: bestPath,
+				terminator: `HANDOFF-${targetAreaId}`
+			}
+		},
 		isInside: function(s) {
 			// check if s is inside area
 			for (station of this.stations) {
