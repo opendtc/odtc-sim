@@ -81,7 +81,6 @@ let dijkstra = (nodes, originId, targetId) => {
 	 */
 }
 
-// TODO: add split/merge/movestation functions
 let Area = (id, existingAreas) => {
 	let newArea = {
 		meanCenter: null,
@@ -264,6 +263,29 @@ let Center = () => {
 			this.stations.push(newStation) // add this station to center list
 
 			area.meanCenter = getMeanCenter(area.stations)
+		},
+		splitArea: function(areaId, stationIds) {
+			// TODO:
+			// check that the area exists and the stations are inside the area
+			// perform the move
+			// create a new area (generate meanCenter, populate stations, allAreas, and neighboringAreas and id)
+			// update old area
+			// update all stations as necessary
+		},
+		mergeAreas: function(a1, a2) {
+			// TODO:
+			// check that both areas exist and are neighbors
+			// perform the move
+			// merge neighboringAreas (and remove the merged area), regenerate meanCenter
+			// update station areaId, stationsInArea, neighborStationsInArea, neighborStationsOutsideArea
+		},
+		moveStationToArea: function(stationId, areaId) {
+			// TODO:
+			// check that the station and area exist
+			// check that target station actually neighbors the target area
+			// perform the move
+			// modify Area meanCenters, station list, neighboringAreas
+			// update station areaId, stationsinarea, neighborsinarea, neighborsoutsidearea
 		},
 		noFlyZones: [] // TODO:
 	}
