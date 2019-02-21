@@ -1,10 +1,5 @@
 // initialize the central service
-let center = Center()
-let sleep = function(t) {
-	return new Promise((res, rej) => {
-		setTimeout(() => res(), t)
-	})
-}
+let center = new Center()
 
 ;(async () => {
 	center.newStation({ x: 500, y: 300 }, 200, 0)
