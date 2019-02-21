@@ -81,12 +81,12 @@ let dijkstra = (nodes, originId, targetId) => {
 	 */
 }
 
-let Area = (id, existingAreas) => {
-	let newArea = {
+let Area = (id, existingAreas, stations = [], neighboringAreas = []) => {
+	return {
 		meanCenter: null,
-		stations: [],
+		stations,
 		allAreas: existingAreas,
-		neighboringAreas: [],
+		neighboringAreas,
 		id: id,
 		generateTypeAFlightPlan: function(dest) {
 			let targetArea = this.allAreas.filter(a => a.isInside(dest))[0]
@@ -143,8 +143,46 @@ let Area = (id, existingAreas) => {
 			return false
 		}
 	}
+}
 
-	return newArea
+let Station = (
+	id,
+	sector,
+	areaId,
+	neighborStationsInArea,
+	neighborStationsOutsideArea,
+	stationsInArea
+) => {
+	return {
+		id,
+		sector,
+		areaId,
+		neighborStationsInArea,
+		neighborStationsOutsideArea,
+		stationsInArea,
+		generateTypeSFlightPlan: function(dest) {
+			// this function is called when the destination of the inspected drone is within this area
+			let destStation = this.stationsInArea.filter(s =>
+				s.sector.isInside(dest)
+			)[0]
+
+			// convert stations into a simpler graph to work with
+			let nodes = this.stationsInArea.map(s => ({
+				id: s.id,
+				edges: s.neighborStationsInArea.map(neighbor => ({
+					id: neighbor.id,
+					cost: dist(s.sector.c, neighbor.sector.c)
+				}))
+			}))
+
+			let res = dijkstra(nodes, this.id, destStation.id)
+
+			return {
+				path: res.path,
+				terminator: `LOCAL`
+			}
+		}
+	}
 }
 
 let Center = () => {
@@ -228,36 +266,14 @@ let Center = () => {
 				s.sector.addChord(t10 + dt1, t10 - dt1)
 			})
 
-			let newStation = {
-				id: this.nextStationId++,
+			let newStation = Station(
+				this.nextStationId++,
 				sector,
-				areaId: area.id,
+				area.id,
 				neighborStationsInArea,
 				neighborStationsOutsideArea,
-				stationsInArea: area.stations,
-				generateTypeSFlightPlan: function(dest) {
-					// this function is called when the destination of the inspected drone is within this area
-					let destStation = this.stationsInArea.filter(s =>
-						s.sector.isInside(dest)
-					)[0]
-
-					// convert stations into a simpler graph to work with
-					let nodes = this.stationsInArea.map(s => ({
-						id: s.id,
-						edges: s.neighborStationsInArea.map(neighbor => ({
-							id: neighbor.id,
-							cost: dist(s.sector.c, neighbor.sector.c)
-						}))
-					}))
-
-					let res = dijkstra(nodes, this.id, destStation.id)
-
-					return {
-						path: res.path,
-						terminator: `LOCAL`
-					}
-				}
-			}
+				area.stations
+			)
 
 			area.stations.push(newStation) // add this station to the area
 			this.stations.push(newStation) // add this station to center list
