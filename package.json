@@ -1,0 +1,23 @@
+{
+	"name": "odtc-sim",
+	"version": "0.0.1",
+	"description": "A web-based simulation for the ODTC system using p5",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest",
+		"build": "browserify ./src/sim.js -o bundle.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/opendtc/odtc-sim.git"
+	},
+	"author": "Terrance Li, Andrew Liu, Neal Ma",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/opendtc/odtc-sim/issues"
+	},
+	"homepage": "https://github.com/opendtc/odtc-sim#readme",
+	"devDependencies": {
+		"browserify": "^16.2.3"
+	}
+}

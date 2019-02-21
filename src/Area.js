@@ -1,4 +1,6 @@
-class Area {
+let { getMeanCenter } = require('./utils')
+
+module.exports = class Area {
 	constructor(id, existingAreas, stations = [], neighboringAreas = []) {
 		this.meanCenter = getMeanCenter(stations)
 		this.stations = stations

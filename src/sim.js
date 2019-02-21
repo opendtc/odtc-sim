@@ -1,3 +1,5 @@
+let Center = require('./Center')
+
 // initialize the central service
 let center = new Center()
 

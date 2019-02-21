@@ -1,4 +1,4 @@
-class Station {
+module.exports = class Station {
 	constructor(
 		id,
 		sector,

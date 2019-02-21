@@ -48,3 +48,10 @@ let dijkstra = (nodes, originId, targetId) => {
 	 * }
 	 */
 }
+
+module.exports = {
+	sleep,
+	dist,
+	getMeanCenter,
+	dijkstra
+}
