@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
-		"build": "browserify ./src/sim.js -o bundle.js"
+		"build": "browserify ./src/sim.js -o bundle.js",
+		"buildwatch": "watchify ./src/sim.js -o bundle.js"
 	},
 	"repository": {
 		"type": "git",
@@ -18,7 +19,8 @@
 	},
 	"homepage": "https://github.com/opendtc/odtc-sim#readme",
 	"devDependencies": {
-		"browserify": "^16.2.3"
+		"browserify": "^16.2.3",
+		"watchify": "^3.11.1"
 	},
 	"dependencies": {
 		"p5": "^0.7.3"
