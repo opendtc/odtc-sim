@@ -1,5 +1,10 @@
+let Area = require('./Area')
+let Sector = require('./Sector')
+let Station = require('./Station')
+let { getMeanCenter, dist } = require('./utils')
+
 let hasCenterBeenInstantiated = false
-class Center {
+module.exports = class Center {
 	constructor() {
 		if (hasCenterBeenInstantiated)
 			throw 'Center has already been instantiated, there may only be one Center per runtime'
@@ -114,6 +119,7 @@ class Center {
 		// perform the move
 		// merge neighboringAreas (and remove the merged area), regenerate meanCenter
 		// update station areaId, stationsInArea, neighborStationsInArea, neighborStationsOutsideArea
+		// update all other areas
 	}
 	moveStationToArea(stationId, areaId) {
 		// TODO:

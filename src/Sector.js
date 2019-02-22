@@ -1,4 +1,6 @@
-class Sector {
+let { dist } = require('./utils')
+
+module.exports = class Sector {
 	constructor(c, r, chords) {
 		this.c = c
 		this.r = r
