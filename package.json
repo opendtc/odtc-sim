@@ -19,5 +19,8 @@
 	"homepage": "https://github.com/opendtc/odtc-sim#readme",
 	"devDependencies": {
 		"browserify": "^16.2.3"
+	},
+	"dependencies": {
+		"p5": "^0.7.3"
 	}
 }
