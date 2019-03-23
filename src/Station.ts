@@ -1,11 +1,22 @@
-module.exports = class Station {
+import Sector from './Sector'
+import { dist, dijkstra } from './utils'
+import Location from './Location'
+
+export default class Station {
+	id: number
+	sector: Sector
+	areaId: number
+	neighborStationsInArea: Station[]
+	neighborStationsOutsideArea: Station[]
+	stationsInArea: Station[]
+
 	constructor(
-		id,
-		sector,
-		areaId,
-		neighborStationsInArea,
-		neighborStationsOutsideArea,
-		stationsInArea
+		id: number,
+		sector: Sector,
+		areaId: number,
+		neighborStationsInArea: Station[],
+		neighborStationsOutsideArea: Station[],
+		stationsInArea: Station[]
 	) {
 		this.id = id
 		this.sector = sector
@@ -15,7 +26,7 @@ module.exports = class Station {
 		this.stationsInArea = stationsInArea
 	}
 
-	generateTypeSFlightPlan(dest) {
+	generateTypeSFlightPlan(dest: Location) {
 		// this function is called when the destination of the inspected drone is within this area
 		let destStation = this.stationsInArea.filter(s =>
 			s.sector.isInside(dest)

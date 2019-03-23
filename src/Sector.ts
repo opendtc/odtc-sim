@@ -1,18 +1,24 @@
-let { dist } = require('./utils')
+import { dist } from './utils'
+import Chord from './Chord'
+import Location from './Location'
 
-module.exports = class Sector {
-	constructor(c, r, chords) {
+export default class Sector {
+	c: Location
+	r: number
+	chords: Chord[]
+
+	constructor(c: Location, r: number, chords: Chord[]) {
 		this.c = c
 		this.r = r
 		this.chords = chords
 	}
 
-	addChord(t1, t2) {
+	addChord(t1: number, t2: number) {
 		// adds a chord, restricting the airspace of this sector
 		this.chords.push({ t1, t2 })
 	}
 
-	isInside(s) {
+	isInside(s: Location) {
 		// checks if point s is inside this sector
 		// first check if s is outside the circle
 		let distance = dist(s, this.c)
@@ -21,7 +27,7 @@ module.exports = class Sector {
 		// check that s is on the center side of each chord
 
 		let theta = Math.atan2(s.y, s.x)
-		for (chord of this.chords) {
+		for (let chord of this.chords) {
 			if (theta < chord.t1 && theta > chord.t2) {
 				// s is in angle range of this chord, check its distance
 				let chordRange = chord.t1 - chord.t2
@@ -36,7 +42,7 @@ module.exports = class Sector {
 		return true
 	}
 
-	doesCircleIntersect(c, r) {
+	doesCircleIntersect(c: Location, r: number) {
 		// checks if this sector's circle intersects with the given circle
 		return dist(c, this.c) < r + this.r
 	}

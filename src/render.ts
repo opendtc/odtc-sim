@@ -1,7 +1,9 @@
-let p5 = require('p5')
-let center
+import p5 from 'p5'
+import Center from './Center'
+import Chord from './Chord'
+let center: Center
 
-let s = sketch => {
+let s = (sketch: any) => {
 	sketch.setup = function() {
 		// console.log(window)
 		sketch.createCanvas(window.innerWidth, window.innerHeight)
@@ -34,7 +36,7 @@ let s = sketch => {
 					// arc(c.x, c.y, r, r, 0, 2 * Math.PI)
 					sketch.ellipse(c.x, c.y, r * 2, r * 2)
 
-					chords.forEach(chord => {
+					chords.forEach((chord: Chord) => {
 						let x1 = r * Math.cos(chord.t1) + c.x
 						let y1 = r * Math.sin(chord.t1) + c.y
 						let x2 = r * Math.cos(chord.t2) + c.x
@@ -52,7 +54,7 @@ let s = sketch => {
 	}
 }
 
-module.exports = c => {
+export default (c: Center) => {
 	center = c
 	return new p5(s)
 }

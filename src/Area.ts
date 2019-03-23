@@ -1,7 +1,20 @@
-let { getMeanCenter } = require('./utils')
+import { getMeanCenter, dist, dijkstra } from './utils'
+import Station from './Station'
+import Location from './Location'
 
-module.exports = class Area {
-	constructor(id, existingAreas, stations = [], neighboringAreas = []) {
+export default class Area {
+	meanCenter: Location | null
+	stations: Station[]
+	allAreas: Area[]
+	neighboringAreas: Area[]
+	id: number
+
+	constructor(
+		id: number,
+		existingAreas: Area[],
+		stations: Station[] = [],
+		neighboringAreas: Area[] = []
+	) {
 		this.meanCenter = getMeanCenter(stations)
 		this.stations = stations
 		this.allAreas = existingAreas
@@ -9,30 +22,34 @@ module.exports = class Area {
 		this.id = id
 	}
 
-	generateTypeAFlightPlan(dest) {
+	generateTypeAFlightPlan(dest: Location) {
 		let targetArea = this.allAreas.filter(a => a.isInside(dest))[0]
 
 		// convert allAreas into a simpler graph to work with
-		let nodes = this.allAreas.map(a => ({
-			id: a.id,
-			edges: a.neighboringAreas.map(neighbor => ({
-				id: neighbor.id,
-				// TODO: consider traffic, weather, and other factors in cost for dijkstras
-				cost: dist(a.meanCenter, neighbor.meanCenter)
+		let nodes = this.allAreas
+			.filter(a => a.meanCenter !== null)
+			.map(a => ({
+				id: a.id,
+				edges: a.neighboringAreas.map(neighbor => ({
+					id: neighbor.id,
+					// TODO: consider traffic, weather, and other factors in cost for dijkstras
+					cost: dist(a.meanCenter, neighbor.meanCenter)
+				}))
 			}))
-		}))
 
 		return dijkstra(nodes, this.id, targetArea.id).path
 	}
 
-	generateTypeSFlightPlan(originStationId, targetAreaId) {
+	generateTypeSFlightPlan(originStationId: number, targetAreaId: number) {
 		// generates a flight plan to appropriate sector for handoff to area with id areaId
 
 		// find the station(s) in this area that connects to that area
 		let handOffStations = this.stations.filter(s => {
-			return s.neighborStationsOutsideArea
-				.map(nS => nS.areaId)
-				.includes(targetAreaId)
+			return (
+				s.neighborStationsOutsideArea
+					.map(nS => nS.areaId)
+					.indexOf(targetAreaId) >= 0
+			)
 		})
 
 		// convert stations into a simpler graph to work with
@@ -58,9 +75,9 @@ module.exports = class Area {
 		}
 	}
 
-	isInside(s) {
+	isInside(s: Location) {
 		// check if s is inside area
-		for (station of this.stations) {
+		for (let station of this.stations) {
 			if (station.sector.isInside(s)) return true
 		}
 		return false

@@ -1,10 +1,17 @@
-let Area = require('./Area')
-let Sector = require('./Sector')
-let Station = require('./Station')
-let { getMeanCenter, dist } = require('./utils')
+import Area from './Area'
+import Sector from './Sector'
+import Station from './Station'
+import { getMeanCenter, dist } from './utils'
+import Location from './Location'
 
 let hasCenterBeenInstantiated = false
-module.exports = class Center {
+export default class Center {
+	nextStationId: number
+	nextAreaId: number
+	areas: Area[]
+	stations: Station[]
+	noFlyZones: []
+
 	constructor() {
 		if (hasCenterBeenInstantiated)
 			throw 'Center has already been instantiated, there may only be one Center per runtime'
@@ -18,7 +25,7 @@ module.exports = class Center {
 		hasCenterBeenInstantiated = true
 	}
 
-	newStation(location, range) {
+	newStation(location: Location, range: number) {
 		// before all else, check that the center of this station is not inside another sector
 		// also check that this station's range doesn't encompass other stations
 		for (let station of this.stations) {
@@ -31,9 +38,9 @@ module.exports = class Center {
 			s.sector.doesCircleIntersect(location, range)
 		)
 
-		let area,
-			neighborStationsInArea = [],
-			neighborStationsOutsideArea = []
+		let area: Area,
+			neighborStationsInArea: Station[] = [],
+			neighborStationsOutsideArea: Station[] = []
 		if (intersectingStations.length > 0) {
 			// if there are intersecting stations, add this station to one of those areas
 			let areaId = intersectingStations[0].areaId
@@ -46,14 +53,14 @@ module.exports = class Center {
 					neighborStationsOutsideArea.push(s)
 
 					// make sure that this neighbor station's area is added as a neighbor area of this area
-					if (!area.neighboringAreas.map(a => a.id).includes(s.areaId)) {
+					if (area.neighboringAreas.map(a => a.id).indexOf(s.areaId) < 0) {
 						area.neighboringAreas.push(this.areas[s.areaId])
 					}
 
 					if (
-						!this.areas[s.areaId].neighboringAreas
+						this.areas[s.areaId].neighboringAreas
 							.map(a => a.id)
-							.includes(areaId)
+							.indexOf(areaId) < 0
 					) {
 						this.areas[s.areaId].neighboringAreas.push(area)
 					}
@@ -105,28 +112,28 @@ module.exports = class Center {
 		area.meanCenter = getMeanCenter(area.stations)
 	}
 
-	splitArea(areaId, stationIds) {
-		// TODO:
-		// check that the area exists and the stations are inside the area
-		// perform the move
-		// create a new area (generate meanCenter, populate stations, allAreas, and neighboringAreas and id)
-		// update old area
-		// update all stations as necessary
-	}
-	mergeAreas(a1, a2) {
-		// TODO:
-		// check that both areas exist and are neighbors
-		// perform the move
-		// merge neighboringAreas (and remove the merged area), regenerate meanCenter
-		// update station areaId, stationsInArea, neighborStationsInArea, neighborStationsOutsideArea
-		// update all other areas
-	}
-	moveStationToArea(stationId, areaId) {
-		// TODO:
-		// check that the station and area exist
-		// check that target station actually neighbors the target area
-		// perform the move
-		// modify Area meanCenters, station list, neighboringAreas
-		// update station areaId, stationsinarea, neighborsinarea, neighborsoutsidearea
-	}
+	// splitArea(areaId, stationIds) {
+	// 	// TODO:
+	// 	// check that the area exists and the stations are inside the area
+	// 	// perform the move
+	// 	// create a new area (generate meanCenter, populate stations, allAreas, and neighboringAreas and id)
+	// 	// update old area
+	// 	// update all stations as necessary
+	// }
+	// mergeAreas(a1, a2) {
+	// 	// TODO:
+	// 	// check that both areas exist and are neighbors
+	// 	// perform the move
+	// 	// merge neighboringAreas (and remove the merged area), regenerate meanCenter
+	// 	// update station areaId, stationsInArea, neighborStationsInArea, neighborStationsOutsideArea
+	// 	// update all other areas
+	// }
+	// moveStationToArea(stationId, areaId) {
+	// 	// TODO:
+	// 	// check that the station and area exist
+	// 	// check that target station actually neighbors the target area
+	// 	// perform the move
+	// 	// modify Area meanCenters, station list, neighboringAreas
+	// 	// update station areaId, stationsinarea, neighborsinarea, neighborsoutsidearea
+	// }
 }

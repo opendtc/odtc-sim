@@ -1,14 +1,18 @@
-let sleep = function(t) {
+import Station from './Station'
+import Location from './Location'
+
+export let sleep = function(t: number) {
 	return new Promise((res, rej) => {
 		setTimeout(() => res(), t)
 	})
 }
 
-let dist = (p1, p2) => {
+export let dist = (p1: Location | null, p2: Location | null) => {
+	if (!p1 || !p2) return Number.MAX_VALUE
 	return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
 }
 
-let getMeanCenter = stations => {
+export let getMeanCenter = (stations: Station[]): Location | null => {
 	if (stations.length === 0) return null
 	let sum = stations.reduce(
 		(a, c) => {
@@ -26,7 +30,11 @@ let getMeanCenter = stations => {
 	return sum
 }
 
-let dijkstra = (nodes, originId, targetId) => {
+export let dijkstra = (
+	nodes: { id: number; edges: { id: number; cost: number }[] }[],
+	originId: number,
+	targetId: number
+) => {
 	// TODO: ANDY PLEASE WRITE THIS THANKS
 	/**
 	 * nodes: [
@@ -47,11 +55,8 @@ let dijkstra = (nodes, originId, targetId) => {
 	 *    cost: 1093
 	 * }
 	 */
-}
-
-module.exports = {
-	sleep,
-	dist,
-	getMeanCenter,
-	dijkstra
+	return {
+		path: [],
+		cost: 0
+	}
 }
