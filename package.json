@@ -1,6 +1,6 @@
 {
 	"name": "odtc-sim",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "A web-based simulation for the ODTC system using p5",
 	"main": "index.js",
 	"scripts": {
